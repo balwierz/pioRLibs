@@ -57,7 +57,11 @@ plotTriangleCorrValues <- function(corrValues, colVector="black", cex)
   
   for(v in values)
   {
+    # empty plot:
     plot(1, type="n", axes=F, xlab="", ylab="")
+    # background colour:
+    rect(par("usr")[1],par("usr")[3],par("usr")[2],par("usr")[4],col = topo.colors(n = 257)[max(1, v*256)])
+    # corr value as text:
     legend("center", legend=round(v, 4), 
            text.col=colVector, bty="n", 
            text.font=2, cex=cex)
@@ -105,10 +109,11 @@ fancyCorrMat = function(dat, outF, log=TRUE, bandwidth, xlim, ylim, cex=1, width
   # input is a data frame of counts: columns are samples.
   # colnames are plotted
   # pts --> logical or index indexing of rows of dat to be plotted
-	stopifnot(!missing(dat))
-	stopifnot(!missing(outF))
-	stopifnot(inherits(dat, "data.frame"))
-	png(outF, width=width, height=height, type="Xlib")
+  stopifnot(!missing(dat))
+  stopifnot(!missing(outF))
+  stopifnot(inherits(dat, "data.frame"))
+  
+  png(outF, width=width, height=height) #, type="Xlib")
   layout(mat=setLayoutMatrix(length(dat)))
   par(mar=c(5, 4, 4, 2))
   plotDiagonal(names(dat), cex=cex)

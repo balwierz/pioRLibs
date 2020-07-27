@@ -120,3 +120,31 @@ antisymmetriseScoreMatrix = function(sm, windowsUsed)
 			   )
 		})	
 }
+
+# more complicated case:
+# we have two CAGE signal files for plus and minus strand in Bw files
+# if some bigwigs contain no data for a given chromosome than genomation removes such regions.
+# This is crap for us, and should be fixed
+# This is the workaround, which puts zero in unaccounted regions:
+# Ignore warnings from this function.
+ScoreMatrixFromTwoBigWigsSafe <- function(plusMinusBws, windows, negateMinusStrand = TRUE)
+{
+    require("genomation")
+    stopifnot(min(width(windows)) == max(width(windows)))
+    ret <- new("ScoreMatrix", matrix(0, length(windows), width(windows)[1]))  
+    # fill it with data for plus strand:
+    strands <- c("+", "-");
+    for(i in 1:2)
+    {
+        str <- strands[i]
+        bar <- ScoreMatrix(plusMinusBws[i], windows=windows, strand.aware=T)
+        dn <- attr(bar, "dimnames")[[1]] %>% as.integer()   # prom indices present in bar;
+        assignRI <- ( strand(windows[dn]) == str) %>% as.logical()
+        assignLI <- ((strand(windows)     == str) %>% as.logical()) &
+            (1:length(windows) %in% dn)  # left index
+        if(str == "-" && negateMinusStrand)
+            bar@.Data <- -bar@.Data
+        ret@.Data[assignLI, ] <- bar@.Data[assignRI, ]
+    }
+    ret
+}

@@ -5,9 +5,10 @@ safeEcdf <- function(dataList, xlab="", xlim, ...)
 	require(Hmisc)
 	if(is.null(names(dataList)))
 		stop("safeEcdf: input list should be named")
-	group <- factor(levels=names(dataList),
-					x=unlist(lapply(X=seq_along(dataList), 
-									FUN=function(i) rep(names(dataList)[i], length(dataList[[i]]))
+	group <- 
+	    factor(levels=names(dataList),
+	           x=unlist(lapply(X=seq_along(dataList), 
+	                           FUN=function(i) rep(names(dataList)[i], length(dataList[[i]]))
 					)))
 	x <- unlist(dataList)
 	if(missing(xlim))
