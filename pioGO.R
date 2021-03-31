@@ -10,7 +10,7 @@
 # set a cutoff on distance to TSS or so and provide the list of transcripts and alltranscript set
 # for instance:
 # foo = pioGO(thisGenes=peaksUp.anno$GENEID)
-pioGO = function(thisGenes, allGenes = NULL, txDb = NULL)
+pioGO = function(thisGenes, allGenes = NULL, txDb = NULL, genome='danRer10')
 {
   require(goseq)
   require(org.Dr.eg.db)
@@ -29,7 +29,7 @@ pioGO = function(thisGenes, allGenes = NULL, txDb = NULL)
   
   #thisTx = unique(sort(anno[anno$K27me3_128C==0,"geneId", drop=T]))
   pwf[thisGenes, "DEgenes"] = 1L
-  aaa = goseq(pwf, 'danRer10', 'ensGene', method = "Wallenius", use_genes_without_cat = F)
+  aaa = goseq(pwf, genome, 'ensGene', method = "Wallenius", use_genes_without_cat = F)
   aaa$bh_adj_over_represented_pvalue = p.adjust(aaa$over_represented_pvalue, method="BH")
   aaa$bh_adj_under_represented_pvalue = p.adjust(aaa$under_represented_pvalue, method="BH")
   return(aaa)

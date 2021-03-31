@@ -22,3 +22,9 @@ normalize.to.reference.power.law.distribution <- function(values, lin.reg.coef, 
 	return(values.norm)
 	
 }
+
+
+### in CAGER there is only one TC (in a sample) per consensus cluster.
+### seems completely odd and probably is a bug by design.
+### 
+### 
